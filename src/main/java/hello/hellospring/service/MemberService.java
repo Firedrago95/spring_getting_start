@@ -20,48 +20,26 @@ public class MemberService {
      * 회원가입
      */
     public Long join(Member member) {
-
-        long start = System.currentTimeMillis();
-        try {
-            validateDuplicatemember(member); // 중복 회원 검증
-            memberRepository.save(member);
-            return member.getId();
-        } finally {
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("join = " + timeMs +"ms");
-        }
+        validateDuplicatemember(member); // 중복 회원 검증
+        memberRepository.save(member);
+        return member.getId();
     }
 
     private void validateDuplicatemember(Member member) {
         memberRepository.findByName(member.getName())
-            .ifPresent(m -> {
-                throw new IllegalStateException("이미 존재하는 회원입니다.");
-            });
+                .ifPresent(m -> {
+                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                });
     }
 
     /**
      * 전체 회원 조회
      */
     public List<Member> findmembers() {
-        long start = System.currentTimeMillis();
-        try {
-            return memberRepository.findAll();
-        } finally {
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("findmembers = " + timeMs +"ms");
-        }
+        return memberRepository.findAll();
     }
 
     public Optional<Member> findOne(Long memberId) {
-        long start = System.currentTimeMillis();
-        try {
-            return memberRepository.findById(memberId);
-        } finally {
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("findOne = " + timeMs +"ms");
-        }
+        return memberRepository.findById(memberId);
     }
 }
